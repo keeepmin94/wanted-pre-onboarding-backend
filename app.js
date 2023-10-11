@@ -1,11 +1,11 @@
-import express from "express";
-import dotenv from "dotenv";
+const express = require("express");
+const dotenv = require("dotenv");
 //dotenv.config({ path: "./config/.env" });
-
-import companyRouter from "./routes/company";
-import userRouter from "./routes/user";
-import applicantRouter from "./routes/applicant";
-import noticeRouter from "./routes/notice";
+const { sequelize } = require("./models");
+const userRouter = require("./routes/user.js");
+const applicantRouter = require("./routes/applicant.js");
+const noticeRouter = require("./routes/notice.js");
+const companyRouter = require("./routes/company.js");
 
 const app = express();
 app.use(express.json());
