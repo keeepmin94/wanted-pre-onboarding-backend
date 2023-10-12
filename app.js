@@ -15,9 +15,10 @@ app.engine("html", require("ejs").renderFile);
 
 app.use("/company", companyRouter);
 app.use("/user", userRouter);
+app.use("/notice", noticeRouter);
 
 sequelize
-  .sync()
+  .sync({ force: false })
   .then(() => console.log("connected database"))
   .catch((err) => console.error("occurred error in database connecting", err));
 
