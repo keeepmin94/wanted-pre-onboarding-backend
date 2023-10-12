@@ -2,19 +2,20 @@ const Applicant = require("../models/applicant");
 
 exports.registerApplicant = async (req, res, next) => {
   try {
-    const { userId, companyId } = req.body;
-
+    const { userId } = req.body;
+    const noticeId = req.params.id;
     const user_applicant = await Applicant.findOne({
-      where: { UserId: userId, company_id: companyId },
+      where: { UserId: userId, notice_id: noticeId },
     });
 
+    // 해당 채용공고의 1회만 지원 가능함
     if (user_applicant) {
       res.json({ result: false, message: "이미 지원한 공고입니다." });
       return;
     }
 
     const applicant = await Applicant.create({
-      company_id: companyId,
+      notice_id: noticeId,
       UserId: userId,
     });
 
