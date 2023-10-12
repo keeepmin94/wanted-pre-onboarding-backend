@@ -10,11 +10,6 @@ class Applicant extends Sequelize.Model {
           autoIncrement: true,
           comment: "지원 ID",
         },
-        user_id: {
-          type: Sequelize.INTEGER,
-          allowNull: false,
-          comment: "지원자 id",
-        },
         company_id: {
           type: Sequelize.INTEGER,
           allowNull: false,
