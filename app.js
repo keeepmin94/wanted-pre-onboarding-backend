@@ -14,6 +14,7 @@ app.set("view engine", "ejs");
 app.engine("html", require("ejs").renderFile);
 
 app.use("/company", companyRouter);
+app.use("/user", userRouter);
 
 sequelize
   .sync()

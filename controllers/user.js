@@ -1,16 +1,16 @@
-const Company = require("../models/company");
+const User = require("../models/user");
 
-exports.registerCompany = async (req, res, next) => {
+exports.registerUser = async (req, res, next) => {
   try {
     const { name } = req.body;
-    const company = await Company.create({
+    const user = await User.create({
       name,
     });
     return res
       .status(201)
       .json({
-        message: "회사 등록 성공",
-        company,
+        message: "유저 등록 성공",
+        user,
       })
       .end();
   } catch (error) {
@@ -22,15 +22,15 @@ exports.registerCompany = async (req, res, next) => {
   }
 };
 
-exports.getCompanys = async (req, res, next) => {
+exports.getUsers = async (req, res, next) => {
   try {
-    const companys = await Company.findAll({
+    const users = await User.findAll({
       attributes: {
         exclude: ["createdAt", "updatedAt"],
       },
     });
 
-    return res.status(201).send(companys).end();
+    return res.status(201).send(users).end();
   } catch (error) {
     console.error(error);
     return res.status(500).json({
