@@ -10,18 +10,6 @@ class Notice extends Sequelize.Model {
           autoIncrement: true,
           comment: "채용 공고 ID",
         },
-        company_name: {
-          type: Sequelize.STRING,
-          comment: "회사명",
-        },
-        country: {
-          type: Sequelize.STRING,
-          comment: "국가",
-        },
-        area: {
-          type: Sequelize.STRING,
-          comment: "지역",
-        },
         position: {
           type: Sequelize.STRING,
           comment: "채용 포지션",
