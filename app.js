@@ -1,5 +1,6 @@
 const express = require("express");
 const dotenv = require("dotenv");
+const path = require("path");
 //dotenv.config({ path: "./config/.env" });
 const { sequelize } = require("./models");
 const userRouter = require("./routes/user.js");
@@ -9,6 +10,10 @@ const companyRouter = require("./routes/company.js");
 
 const app = express();
 app.use(express.json());
+app.set("view engine", "ejs");
+app.engine("html", require("ejs").renderFile);
+
+app.use("/company", companyRouter);
 
 sequelize
   .sync()
