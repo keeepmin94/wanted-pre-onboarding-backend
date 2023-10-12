@@ -13,7 +13,15 @@ class Company extends Sequelize.Model {
         },
         name: {
           type: Sequelize.STRING,
-          comment: "회사 이름",
+          comment: "회사명",
+        },
+        country: {
+          type: Sequelize.STRING,
+          comment: "국가",
+        },
+        area: {
+          type: Sequelize.STRING,
+          comment: "지역",
         },
       },
       {

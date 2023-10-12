@@ -2,9 +2,11 @@ const Company = require("../models/company");
 
 exports.registerCompany = async (req, res, next) => {
   try {
-    const { name } = req.body;
+    const { name, country, area } = req.body;
     const company = await Company.create({
       name,
+      country,
+      area,
     });
     return res
       .status(201)
