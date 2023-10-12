@@ -21,3 +21,21 @@ exports.registerCompany = async (req, res, next) => {
     });
   }
 };
+
+exports.getCompanys = async (req, res, next) => {
+  try {
+    const companys = await Company.findAll({
+      attributes: {
+        exclude: ["createdAt", "updatedAt"],
+      },
+    });
+
+    return res.status(201).send(companys).end();
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      code: 500,
+      message: "서버 에러",
+    });
+  }
+};
