@@ -29,7 +29,7 @@ class User extends Sequelize.Model {
   }
 
   static associate(db) {
-    db.User.hasOne(db.Applicant);
+    db.User.hasMany(db.Applicant);
   }
 }
 
