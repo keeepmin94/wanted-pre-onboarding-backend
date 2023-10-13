@@ -35,20 +35,25 @@ exports.registerApplicant = async (req, res, next) => {
   }
 };
 
-// exports.getCompanys = async (req, res, next) => {
-//   try {
-//     const companys = await Company.findAll({
-//       attributes: {
-//         exclude: ["createdAt", "updatedAt"],
-//       },
-//     });
+exports.getApplicants = async (req, res, next) => {
+  try {
+    const applicants = await Applicant.findAll({
+      attributes: {
+        exclude: ["createdAt", "updatedAt"],
+      },
+    });
 
-//     return res.status(201).send(companys).end();
-//   } catch (error) {
-//     console.error(error);
-//     return res.status(500).json({
-//       code: 500,
-//       message: "서버 에러",
-//     });
-//   }
-// };
+    if (!applicants) {
+      next({ status: 400, message: "지원자 목록을 찾을수 없습니다." });
+      return;
+    }
+
+    return res.status(201).send(applicants).end();
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      code: 500,
+      message: "서버 에러",
+    });
+  }
+};
