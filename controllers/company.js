@@ -32,6 +32,11 @@ exports.getCompanys = async (req, res, next) => {
       },
     });
 
+    if (!companys) {
+      next({ status: 400, message: "회사를 찾을수 없습니다." });
+      return;
+    }
+
     return res.status(201).send(companys).end();
   } catch (error) {
     console.error(error);

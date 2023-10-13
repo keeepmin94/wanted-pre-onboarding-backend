@@ -41,6 +41,12 @@ exports.updateNotice = async (req, res, next) => {
       },
       { where: { _id: id } }
     );
+
+    if (!notice) {
+      next({ status: 400, message: "해당 채용공고를 찾을수 없습니다." });
+      return;
+    }
+
     return res
       .status(200)
       .json({
@@ -89,6 +95,11 @@ exports.getAllNotices = async (req, res, next) => {
       raw: true,
     });
 
+    if (!notice) {
+      next({ status: 400, message: "채용공고가 없습니다." });
+      return;
+    }
+
     return res.status(200).send(notices).end();
   } catch (error) {
     console.error(error);
@@ -115,6 +126,11 @@ exports.getNotice = async (req, res, next) => {
       raw: true,
     });
 
+    if (!notice) {
+      next({ status: 400, message: "해당 채용공고를 찾을수 없습니다." });
+      return;
+    }
+
     const anotherNotice = await Notice.findAll({
       where: {
         CompanyId: notice.CompanyId,
@@ -129,6 +145,47 @@ exports.getNotice = async (req, res, next) => {
     notice.anotherNotice = anothers;
 
     return res.status(200).send(notice).end();
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      code: 500,
+      message: "서버 에러",
+    });
+  }
+};
+
+exports.getSearchNotice = async (req, res, next) => {
+  try {
+    const searchId = req.query.tag;
+
+    const notices = await Notice.findAll({
+      include: [
+        {
+          model: Company,
+          attributes: ["name", "country", "area"],
+        },
+      ],
+      where: {
+        [sequelize.Op.or]: [
+          { position: { [sequelize.Op.like]: "%" + searchId + "%" } },
+          { skill: { [sequelize.Op.like]: "%" + searchId + "%" } },
+          { content: { [sequelize.Op.like]: "%" + searchId + "%" } },
+          { "$Company.name$": { [sequelize.Op.like]: "%" + searchId + "%" } },
+          {
+            "$Company.country$": { [sequelize.Op.like]: "%" + searchId + "%" },
+          },
+          { "$Company.area$": { [sequelize.Op.like]: "%" + searchId + "%" } },
+        ],
+      },
+      attributes: { exclude: ["createdAt", "updatedAt"] },
+    });
+
+    if (!notices) {
+      next({ status: 400, message: "해당 채용공고를 찾을수 없습니다." });
+      return;
+    }
+
+    return res.status(200).send(notices).end();
   } catch (error) {
     console.error(error);
     return res.status(500).json({

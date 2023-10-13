@@ -30,6 +30,11 @@ exports.getUsers = async (req, res, next) => {
       },
     });
 
+    if (!users) {
+      next({ status: 400, message: "사용자를 찾을수 없습니다." });
+      return;
+    }
+
     return res.status(201).send(users).end();
   } catch (error) {
     console.error(error);
