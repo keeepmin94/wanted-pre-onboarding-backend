@@ -81,17 +81,12 @@ exports.getAllNotices = async (req, res, next) => {
     const notices = await Notice.findAll({
       include: {
         model: Company,
-        attributes: [
-          //   [sequelize.literal("Company.name"), "company_name"],
-          //   [sequelize.literal("Company.country"), "company_country"],
-          ["name", "company_name"],
-          ["country", "company_country"],
-          ["area", "company_area"],
-        ],
+        attributes: ["name", "country", "area"],
       },
       attributes: {
         exclude: ["createdAt", "updatedAt", "content", "CompanyId"],
       },
+      raw: true,
     });
 
     return res.status(200).send(notices).end();
@@ -106,34 +101,32 @@ exports.getAllNotices = async (req, res, next) => {
 
 exports.getNotice = async (req, res, next) => {
   try {
-    const postIdToSearch = req.params.id;
+    const noticeIdToSearch = req.params.id;
 
     const notice = await Notice.findOne({
-      where: { _id: postIdToSearch },
+      where: { _id: noticeIdToSearch },
       include: {
         model: Company,
-        attributes: [
-          ["name", "company_name"],
-          ["country", "company_country"],
-          ["area", "company_area"],
-        ],
+        attributes: ["name", "country", "area"],
       },
       attributes: {
-        exclude: ["createdAt", "updatedAt", "CompanyId"],
+        exclude: ["createdAt", "updatedAt"],
       },
-      //   include: [
-      //     {
-      //       model: Company,
-      //       attributes: [],
-      //       include: {
-      //         model: Notice,
-      //         attributes: ["_id"],
-      //         where: { _id: { [sequelize.Op.ne]: postIdToSearch } },
-      //       },
-      //     },
-      //   ],
       raw: true,
     });
+
+    const anotherNotice = await Notice.findAll({
+      where: {
+        CompanyId: notice.CompanyId,
+        _id: { [sequelize.Op.notIn]: [noticeIdToSearch] },
+      },
+      raw: true,
+      attributes: ["_id"],
+    });
+
+    const anothers = anotherNotice ? anotherNotice.map((obj) => obj._id) : [];
+
+    notice.anotherNotice = anothers;
 
     return res.status(200).send(notice).end();
   } catch (error) {
