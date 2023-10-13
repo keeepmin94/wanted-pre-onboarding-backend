@@ -1,0 +1,44 @@
+version: "3.7"
+
+networks:
+  app-tier:
+    driver: bridge
+# 컴퓨터들(컨테이너들)
+services:
+  # 컨테이너 이름
+  wanted_db_container:
+    container_name: wanted_db_container
+    networks:
+      - app-tier
+    image: mysql:8.0
+    env_file:
+      - .env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    ports:
+      - ${MYSQL_PORT}:3306
+    volumes:
+      - ./data:/var/lib/mysql
+
+  # 컨테이너 이름
+  wanted_server_container:
+    networks:
+      - app-tier
+    build:
+      # 파일경로
+      context: .
+      # 파일명
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    # command: sh -c "sleep 20 && yarn start:dev"
+    volumes:
+      - .:/src
+    restart: always
+    ports:
+      - ${SERVER_PORT}:3000
+    links:
+      - wanted_db_container
+    depends_on:
+      - wanted_db_container
