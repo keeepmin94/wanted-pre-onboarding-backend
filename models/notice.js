@@ -42,6 +42,7 @@ class Notice extends Sequelize.Model {
 
   static associate(db) {
     db.Notice.belongsTo(db.Company);
+    db.Notice.hasMany(db.Applicant);
   }
 }
 

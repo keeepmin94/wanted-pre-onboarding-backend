@@ -95,7 +95,7 @@ exports.getAllNotices = async (req, res, next) => {
       raw: true,
     });
 
-    if (!notice) {
+    if (!notices) {
       next({ status: 400, message: "채용공고가 없습니다." });
       return;
     }

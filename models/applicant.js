@@ -10,11 +10,6 @@ class Applicant extends Sequelize.Model {
           autoIncrement: true,
           comment: "지원 ID",
         },
-        notice_id: {
-          type: Sequelize.INTEGER,
-          allowNull: false,
-          comment: "회사 id",
-        },
       },
       {
         sequelize,
@@ -31,6 +26,7 @@ class Applicant extends Sequelize.Model {
 
   static associate(db) {
     db.Applicant.belongsTo(db.User);
+    db.Applicant.belongsTo(db.Notice);
   }
 }
 

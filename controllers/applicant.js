@@ -5,7 +5,7 @@ exports.registerApplicant = async (req, res, next) => {
     const { userId } = req.body;
     const noticeId = req.params.id;
     const user_applicant = await Applicant.findOne({
-      where: { UserId: userId, notice_id: noticeId },
+      where: { UserId: userId, NoticeId: noticeId },
     });
 
     // 해당 채용공고의 1회만 지원 가능함
@@ -15,8 +15,8 @@ exports.registerApplicant = async (req, res, next) => {
     }
 
     const applicant = await Applicant.create({
-      notice_id: noticeId,
       UserId: userId,
+      NoticeId: noticeId,
     });
 
     return res
